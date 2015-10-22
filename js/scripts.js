@@ -11,6 +11,42 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 }
 
 
+parsers['text/arff'] = function( data ) {
+	var metadata = JSON.parse( findARFFComment( data, 0 ) );
+
+	if( metadata === null ) {
+		pushError( "Sorry, no metadata could be found in the supplied file!" );
+		return;
+	}
+
+	pushLog( "JSON data parsed as..." );
+	dumpJSON( metadata );
+
+	var isValid = validateStructure( metadata );
+	pushLog( "" );
+	pushLog( "Validation results:" );
+	if( isValid )
+		pushReport( "Valid metadata!" );
+	else
+		pushError( "Invalid or missing metadata" );
+}
+
+function findARFFComment( data, start ) {
+	var attempts = 30;
+	var startIndex = typeof start !== 'undefined' ? start : 0;
+	var endIndex = 0;
+	while( startIndex != -1 && attempts-- > 0 )
+	{
+		startIndex = data.indexOf( "% meta", startIndex );
+		if( startIndex > -1 ) {
+			endIndex = data.indexOf( '\n', (startIndex+1) );
+			return data.substring( startIndex+6, endIndex );
+		}
+	}
+	return null;
+}
+
+
 
 parsers['text/xml'] = function( data ) {
 	var metadata = JSON.parse(findXMLComment( data ));
@@ -31,6 +67,24 @@ parsers['text/xml'] = function( data ) {
 	else
 		pushError( "Invalid or missing metadata" );
 }
+
+function findXMLComment( data, start ) {
+	var attempts = 30;
+	var startIndex = typeof start !== 'undefined' ? start : 0;
+	var endIndex = 0;
+	while( startIndex != -1 && attempts-- > 0 )
+	{
+		startIndex = data.indexOf( "<!-- meta", startIndex );
+		if( startIndex > -1 ) {
+			endIndex = data.indexOf( "-->", (startIndex+1) );
+			
+			return data.substring( startIndex+9, endIndex );
+		}
+	}
+	return null;
+}
+
+
 
 parsers['application/json'] = function( data ) {
 	var metadata = JSON.parse( data );
@@ -98,21 +152,6 @@ function dumpJSON( json, prefix ) {
 	}
 }
 
-function findXMLComment( data, start ) {
-	var attempts = 30;
-	var startIndex = typeof start !== 'undefined' ? start : 0;
-	var endIndex = 0;
-	while( startIndex != -1 && attempts-- > 0 )
-	{
-		startIndex = data.indexOf( "<!-- meta", startIndex );
-		if( startIndex > -1 ) {
-			endIndex = data.indexOf( "-->", (startIndex+1) );
-			
-			return data.substring( startIndex+9, endIndex );
-		}
-	}
-	return null;
-}
 
 
 function escapeHTML(unsafe) {
@@ -184,11 +223,19 @@ function handleFileSelect(evt) {
 			var file = _f;
 			return function( e ) {
 				var buffer = reader.result;
+				var type = file.type;
 
-				if( parsers[file.type] )
-					parsers[file.type]( buffer );
+				// Attempt to handle 'unknown' mime types
+				if( type.length == 0 )
+				{
+					if( file.name.toLowerCase().endsWith( ".arff" ) )
+						type = "text/arff";
+				}
+
+				if( parsers[type] )
+					parsers[type]( buffer );
 				else {
-					pushLog( "<error>Sorry! I don't understand that file type (", file.type, ")!</error>" );
+					pushLog( "<error>Sorry! I don't understand that file type (", type, ")!</error>" );
 					pushLog( "Currently this validator supports:" );
 					for(var mime in parsers) {
 						pushLog( "&nbsp;&nbsp;&nbsp", "--", mime );
