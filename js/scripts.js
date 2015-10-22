@@ -68,6 +68,11 @@ parsers['text/xml'] = function( data ) {
 		pushError( "Invalid or missing metadata" );
 }
 
+// Use the same parser for TEI, but as TEI is identified as XML by FileReader objects, this shouldn't be needed. Just included for completeness
+parsers['text/tei'] = parsers['text/xml'];
+
+
+
 function findXMLComment( data, start ) {
 	var attempts = 30;
 	var startIndex = typeof start !== 'undefined' ? start : 0;
