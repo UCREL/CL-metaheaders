@@ -16,6 +16,14 @@ ul { list-style: none; }
 #li { display: table-cell; font-weight: bold; width: 1%; }
 
 section { margin-bottom: 5em; }
+abstract {
+	display: block;
+	background: #f3f3f3;
+	box-shadow: 0 0 3px #dddddd;
+	font-style: italic;
+	padding: 1em;
+	text-align: left;
+}
 
 output {
 	display: block;
