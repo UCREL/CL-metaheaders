@@ -94,11 +94,11 @@ function findXMLComment( data, start ) {
 parsers['application/json'] = function( data ) {
 	var metadata = JSON.parse( data );
 
-	if( typeof metadata.meta === 'undefined' ) {
+	if( typeof metadata.__meta__ === 'undefined' ) {
 		pushError( "JSON was valid, but had no 'meta' object in the top-level object!" );
 		return;
 	} else {
-		metadata = metadata.meta;
+		metadata = metadata.__meta__;
 	}
 	
 	pushLog( "JSON data parsed as..." );
