@@ -1,0 +1,30 @@
+\section{Recognised Fields}
+
+Draft version `1.0' of the specification only mandates two fields, and has two optional fields, which are described as follows:
+
+\begin{description}
+    \item[\texttt{version}] \textit{Optional, Float} \hfill \\
+        The specification version that this metaheader complies with.
+        When missing, the latest specification draft is to be assumed - at this time, the only valid version is `1.0'.
+        
+    \item[\texttt{encoding}] \textit{Required, String} \hfill \\
+        Character encoding of current text, as defined by the IANA list of preferred text encoding names\cite{EncodingNames}.
+    
+    \item[\texttt{mime}] \textit{Required, String} \hfill \\
+        The MIME type used to describe what this file is, examples include standard ones such as \texttt{text/xml}, and \texttt{application/json} as described in\cite{MIMETypes}, alongside extended ones such as \texttt{text/arff} and \texttt{text/tei} which define specific, known file types.
+        
+        It is expected that this collection will expand over time with new file standards, but in the absence of an file type-specific MIME type, the next nearest standard one should be used.
+        In the case of TEI files, if the specific \texttt{text/tei} MIME did not exist, \texttt{text/xml} could be used.
+    
+    \item[\texttt{group}] \textit{Optional, String or Object} \hfill \\
+        Group fields can be used to track which files belong to collections, for example where files from a corpus are processed in fragments, or must be re-assembled after processing.
+        
+\end{description}
+
+The preliminary set of features identified for inclusion have been selected to allow the identification of key features of the subsequent texts, and allow them to be correctly loaded by software, and are:
+
+\begin{itemize}
+    \item common to all machine-readable text representations;
+    \item necessary-yet-uninteresting features of the dataset;
+    \item generally useful across many tool types.
+\end{itemize}
