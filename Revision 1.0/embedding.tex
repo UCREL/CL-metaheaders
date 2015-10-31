@@ -1,0 +1,15 @@
+\section{Embedding}
+
+\subsection{JSON}
+JSON has no comment format, but is our native storage type, so a simple $``meta'':\{ ... \}$ inside the top-level object provides the entry point for the meta header.
+This is the only format that the meta header is \textit{not} inside a comment field, at present.
+
+\subsection{WEKA ARFF}
+Uses \% for comments, must be the first character on the line (may or may not ignore whitespace before \%).
+The most direct way to include a meta header to this format is to simply encode the entire thing on one line to avoid parsing additional lines prefixed by \%`s.
+However, to maintain readability, these will be supported in the finalised 1.0 specification.
+
+\subsection{XML}
+Uses the $<!-- ... -->$ format for comments, and can be placed anywhere, but some XML parsers might not support this and complain if the comment is the first thing in the file--incorrectly identifying the file as having multiple roots, despite not actually being a root element.
+Rather than mandate that tools should update their parsers, we allow the following format anywhere in the first block of the file; $<!-- meta \{ ... \} -->$ wherein the standard then uses the normal JSON formatted data, and can span multiple lines.
+

@@ -1,0 +1,59 @@
+\documentclass[12pt,a4paper]{article}
+
+% DRAFT Watermark
+\usepackage{draftwatermark}
+\SetWatermarkText{DRAFT}
+\SetWatermarkScale{9}
+\SetWatermarkLightness{0.95}
+
+% Colours
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+
+% Margins
+\usepackage[top=2cm,bottom=3cm,left=2cm,right=2cm]{geometry}
+
+% Code listings
+\usepackage{listings}
+\lstset{
+  basicstyle=\fontfamily{lmvtt}\selectfont\small\color{black},
+  columns=fullflexible,
+  tabsize=3,
+  frame=shadowbox
+}
+
+% Links
+\usepackage{hyperref}
+
+
+\title{CL Metaheaders \\ Open Standard \\ Revision 1.0}
+\author{
+        John Vidler \texttt{j.vidler@lancaster.ac.uk} \\
+        Stephen Wattam \texttt{s.wattam@lancaster.ac.uk} \\
+}
+\date{Compiled \today}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\vspace*{3em}
+This standard is currently under heavy development, and is incomplete in a large number of places, please ensure you use the latest edition by examining the compiled date above.
+
+\vspace*{3em}
+
+Comments and suggestions to be directed to\\
+\texttt{j.vidler@lancaster.ac.uk} and/or \texttt{s.wattam@lancaster.ac.uk}
+\end{center}
+\clearpage
+
+\tableofcontents\clearpage
+
+\input{format}\clearpage
+\input{fields}\clearpage
+%\input{embedding}\clearpage
+\input{samples}\clearpage
+
+\bibliographystyle{plain}
+\bibliography{software,standards,surveys}
+
+\end{document}
