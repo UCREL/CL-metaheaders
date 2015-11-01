@@ -55,6 +55,14 @@ output report {
 	vertical-align: middle;
 }
 
+output table {
+    width: 100%;
+}
+
+output tr {
+    height: 1.2em;
+}
+
 .content-box {
 	border: 2px solid #dddddd;
 	box-shadow: 0 1px 3px #fff;
