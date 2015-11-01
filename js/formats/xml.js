@@ -40,7 +40,7 @@ formats['text/xml'] = {
 }
 
 // Use the same parser for TEI, but as TEI is identified as XML by FileReader objects, this shouldn't be needed. Just included for completeness
-formats['text/tei'] = {};
-formats['text/tei'].extend( formats['text/xml'] );
-formats['text/tei']["description"] = "TEI Format XML";
-formats['text/tei']["link"]        = "http://www.tei-c.org/index.xml";
+formats['text/xml-tei'] = {};
+formats['text/xml-tei'].extend( formats['text/xml'] );
+formats['text/xml-tei']["description"] = "TEI Format XML";
+formats['text/xml-tei']["link"]        = "http://www.tei-c.org/index.xml";

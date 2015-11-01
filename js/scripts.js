@@ -1,145 +1,52 @@
 var CURRENT_VERSION = 1.0;
 
 var output = [];
-var parsers = {};
+var formats = {};
 
 // Check for the various File API support.
 if (window.File && window.FileReader && window.FileList && window.Blob) {
 } else {
-	pushError( "Sorry! Your browser does not support Javascript file uploads! This validator will not work without this feature." );
-	pushLog( "This validator was tested with the Chrome browser." );
+	System.pushError( "Sorry! Your browser does not support Javascript file uploads! This validator will not work without this feature." );
+	System.pushLog( "This validator was tested with the Chrome browser." );
 }
 
-
-parsers['text/arff'] = function( data ) {
-	var metadata = JSON.parse( findARFFComment( data, 0 ) );
-
-	if( metadata === null ) {
-		pushError( "Sorry, no metadata could be found in the supplied file!" );
-		return;
-	}
-
-	pushLog( "JSON data parsed as..." );
-	dumpJSON( metadata );
-
-	var isValid = validateStructure( metadata );
-	pushLog( "" );
-	pushLog( "Validation results:" );
-	if( isValid )
-		pushReport( "Valid metadata!" );
-	else
-		pushError( "Invalid or missing metadata" );
-}
-
-function findARFFComment( data, start ) {
-	var attempts = 30;
-	var startIndex = typeof start !== 'undefined' ? start : 0;
-	var endIndex = 0;
-	while( startIndex != -1 && attempts-- > 0 )
-	{
-		startIndex = data.indexOf( "% meta", startIndex );
-		if( startIndex > -1 ) {
-			endIndex = data.indexOf( '\n', (startIndex+1) );
-			return data.substring( startIndex+6, endIndex );
+// Extend the object prototype so we can pseudo-copy functions
+Object.prototype.extend = function(obj) {
+	for (var i in obj) {
+		if (obj.hasOwnProperty(i)) {
+			this[i] = obj[i];
 		}
 	}
-	return null;
-}
-
-
-
-parsers['text/xml'] = function( data ) {
-	var metadata = JSON.parse(findXMLComment( data ));
-
-	if( metadata === null ) {
-		pushError( "Sorry, no metadata could be found in the supplied file!" );
-		return;
-	}
-
-	pushLog( "JSON data parsed as..." );
-	dumpJSON( metadata );
-
-	var isValid = validateStructure( metadata );
-	pushLog( "" );
-	pushLog( "Validation results:" );
-	if( isValid )
-		pushReport( "Valid metadata!" );
-	else
-		pushError( "Invalid or missing metadata" );
-}
-
-// Use the same parser for TEI, but as TEI is identified as XML by FileReader objects, this shouldn't be needed. Just included for completeness
-parsers['text/tei'] = parsers['text/xml'];
-
-
-
-function findXMLComment( data, start ) {
-	var attempts = 30;
-	var startIndex = typeof start !== 'undefined' ? start : 0;
-	var endIndex = 0;
-	while( startIndex != -1 && attempts-- > 0 )
-	{
-		startIndex = data.indexOf( "<!-- meta", startIndex );
-		if( startIndex > -1 ) {
-			endIndex = data.indexOf( "-->", (startIndex+1) );
-			
-			return data.substring( startIndex+9, endIndex );
-		}
-	}
-	return null;
-}
-
-
-
-parsers['application/json'] = function( data ) {
-	var metadata = JSON.parse( data );
-
-	if( typeof metadata.__meta__ === 'undefined' ) {
-		pushError( "JSON was valid, but had no 'meta' object in the top-level object!" );
-		return;
-	} else {
-		metadata = metadata.__meta__;
-	}
-	
-	pushLog( "JSON data parsed as..." );
-	dumpJSON( metadata );
-
-	var isValid = validateStructure( metadata );
-	pushLog( "" );
-	pushLog( "Validation results:" );
-	if( isValid )
-		pushReport( "Valid metadata!" );
-	else
-		pushError( "Invalid or missing metadata" );
 };
 
 
 function validateStructure( json ) {
 	var status = true;
 	if( typeof json.version === 'undefined' ) {
-		pushWarning( "An explicit version value was not found, using the latest version (", CURRENT_VERSION, ")" );
+		System.pushWarning( "An explicit version value was not found, using the latest version (", CURRENT_VERSION, ")" );
 		status = false;
 	} else {
-		pushReport( "Version present! Checking against version", json.version, "rules" );
+		System.pushReport( "Version present! Checking against version", json.version, "rules" );
 	}
 
 	if( typeof json.encoding === 'undefined' ) {
-		pushError( "Missing 'encoding' field!" );
+		System.pushError( "Missing 'encoding' field!" );
 		status = false;
 	}
 
 	if( typeof json.mime === 'undefined' ) {
-		pushError( "Missing 'mime' field!" );
+		System.pushError( "Missing 'mime' field!" );
 		status = false;
 	} else {
-		if( mimetypes[json.mime] )
-			pushReport( "Mime type present, and read as '", json.mime, "', aka. <a href='"+mimetypes[json.mime].link+"'>", mimetypes[json.mime].description, "</a>" );
+		if( formats[json.mime] )
+			System.pushReport( "Mime type present, and read as '", json.mime, "', aka. <a href='"+formats[json.mime].link+"'>", formats[json.mime].description, "</a>" );
 		else
-			pushError( "Mime type present, but not a recognised type! (", json.mime, ")" );
+			System.pushError( "Mime type present, but not a recognised type! (", json.mime, ")" );
 	}
 
 	return status;
 }
+
 
 function dumpJSON( json, prefix ) {
 	prefix = typeof prefix !== 'undefined' ? prefix : "";
@@ -148,16 +55,14 @@ function dumpJSON( json, prefix ) {
 		value = json[name];
 
 		if( typeof value === 'object' ) {
-			pushLog( prefix, name, "{" );
+			System.pushLog( prefix, name, "{" );
 			dumpJSON( value, prefix+"&nbsp;&nbsp;&nbsp;" );
-			pushLog( prefix, "}" );
+			System.pushLog( prefix, "}" );
 		} else {
-			pushLog( prefix, name, ":", value );
+			System.pushLog( prefix, name, ":", value );
 		}
 	}
 }
-
-
 
 function escapeHTML(unsafe) {
 	return unsafe
@@ -172,29 +77,31 @@ function argumentsToArray(args) {
 	return [].slice.apply(args);
 }
 
-function pushLog() {
-	var args = argumentsToArray( arguments );
-	output.push( '<li>', args.join(' '), '</li>' );
-	document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-}
+var System = {
+	pushLog: function() {
+		var args = argumentsToArray( arguments );
+		output.push( '<li>', args.join(' '), '</li>' );
+		document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+	},
 
-function pushWarning() {
-	var args = argumentsToArray( arguments );
-	output.push( '<li><warning>', args.join(' '), '<img src="img/attention-64.png" class="icon" /></warning></li>' );
-	document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-}
+	pushWarning: function() {
+		var args = argumentsToArray( arguments );
+		output.push( '<li><warning>', args.join(' '), '<img src="img/attention-64.png" class="icon" /></warning></li>' );
+		document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+	},
 
-function pushError() {
-	var args = argumentsToArray( arguments );
-	output.push( '<li><error>', args.join(' '), '<img src="img/cancel-64.png" class="icon" /></error></li>' );
-	document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-}
+	pushError: function() {
+		var args = argumentsToArray( arguments );
+		output.push( '<li><error>', args.join(' '), '<img src="img/cancel-64.png" class="icon" /></error></li>' );
+		document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+	},
 
-function pushReport() {
-	var args = argumentsToArray( arguments );
-	output.push( '<li><report>', args.join(' '), '<img src="img/checked-64.png" class="icon" /></report></li>' );
-	document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-}
+	pushReport: function() {
+		var args = argumentsToArray( arguments );
+		output.push( '<li><report>', args.join(' '), '<img src="img/checked-64.png" class="icon" /></report></li>' );
+		document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+	}
+};
 
 function handleFileSelect(evt) {
 	var files = evt.target.files; // FileList object
@@ -202,7 +109,7 @@ function handleFileSelect(evt) {
 
 	// files is a FileList of File objects. List some properties.
 	for (var i = 0, f; f = files[i]; i++) {
-		pushLog('<strong>' +escape(f.name)+ '</strong> (' +(f.type || 'n/a')+ ') - '
+		System.pushLog('<strong>' +escape(f.name)+ '</strong> (' +(f.type || 'n/a')+ ') - '
 				+f.size+ ' bytes, last modified: '
 				+(f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a') );
 
@@ -211,16 +118,16 @@ function handleFileSelect(evt) {
 		reader.onerror = function( evt ) {
 			switch(evt.target.error.code) {
 				case evt.target.error.NOT_FOUND_ERR:
-					pushLog( "<strong>File not found - sorry!</strong>" );
+					System.pushLog( "<strong>File not found - sorry!</strong>" );
 					break;
 				case evt.target.error.NOT_READABLE_ERR:
-					pushLog( "<strong>File cannot be read - sorry!</strong>" );
+					System.pushLog( "<strong>File cannot be read - sorry!</strong>" );
 					break;
 				case evt.target.error.ABORT_ERR:
-					pushLog( "<strong>File read aborted.</strong>" );
+					System.pushLog( "<strong>File read aborted.</strong>" );
 					break; // noop
 				default:
-					pushLog( "<strong>Error reading file - sorry!</strong>" );
+					System.pushLog( "<strong>Error reading file - sorry!</strong>" );
 			};
 		}
 
@@ -230,20 +137,20 @@ function handleFileSelect(evt) {
 				var buffer = reader.result;
 				var type = file.type;
 
-				// Attempt to handle 'unknown' mime types
+				// Attempt to handle 'unknown' mime types - this needs to be generified!
 				if( type.length == 0 )
 				{
 					if( file.name.toLowerCase().endsWith( ".arff" ) )
 						type = "text/arff";
 				}
 
-				if( parsers[type] )
-					parsers[type]( buffer );
+				if( formats[type] )
+					formats[type].parser( buffer );
 				else {
-					pushLog( "<error>Sorry! I don't understand that file type (", type, ")!</error>" );
-					pushLog( "Currently this validator supports:" );
-					for(var mime in parsers) {
-						pushLog( "&nbsp;&nbsp;&nbsp", "--", mime );
+					System.pushLog( "<error>Sorry! I don't understand that file type (", type, ")!</error>" );
+					System.pushLog( "Currently this validator supports:" );
+					for(var mime in formats) {
+						System.pushLog( "&nbsp;&nbsp;&nbsp", "--", mime );
 					}
 				}
 			};
@@ -253,6 +160,4 @@ function handleFileSelect(evt) {
 		reader.readAsText( blob, "UTF-8" );
 	}
 }
-
-pushLog( "Nothing to do (yet?)..." );
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
