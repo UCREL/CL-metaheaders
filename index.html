@@ -23,12 +23,39 @@
 			<p>Working with several different tools can be a complete pain if the formats don't match up. To remidy this, we are designing a small human readable header to be included in as many file types as possible describing the file contents in a cross-platform, cross-tool way!</p>
 
 			<!-- NOTE: Here we should link to the standard when it's ready! -->
-			<p><a class="pure-button" href="https://github.com/UCREL/CL-metaheaders/raw/master/Revision%201.0/CL%20Metaheaders%20-%20Open%20Standard.pdf">Take me to the (Alpha) Open Standard document!</a><br />
+			<p class="centerbox"><a class="pure-button" href="https://github.com/UCREL/CL-metaheaders/raw/master/Revision%201.0/CL%20Metaheaders%20-%20Open%20Standard.pdf">Take me to the (Alpha) Open Standard document!</a><br />
 			<small>The standard is still in a pre-1.0 stage, but available for comment and additions</small></p>
 		</section>
 
 		<section>
-			<p><a class="pure-button pure-button-primary" href="validation.html">Take me to the on-line validation tool!</a></p>
+			<h2>Examples</h2>
+			<p>[general intro]</p>
+
+			<h3>The Basics</h3>
+			<p>While having a standard to define the attributes is a good thing&trade;, the standard must be simple to implement, and to that end, extremely minimal declarations can be used. A simple XML file, encoded in UTF-8 unicode would be required only to declare it's encoding and mimetype to be standards compliant.</p>
+			<code>&lt;!-- meta { "encoding":"utf-8", "mime":"text/xml" } --&gt;</code>
+			<p>The snippet above is a perfectly compliant line to include in a basic XML document, and as the headers are intended to be transparent to normal parsers to the files, the entire meta block is wrapped in a comment.</p>
+			<p>We `hide' the headers this way to ensure backwards compatability with non-compliant parsers</p>
+
+			<h3>Extensions</h3>
+			<p>Sometimes, it may be desirable to include additional information in a header - as we, the authors, cannot possibly expect to know every possible set of data to be included in the attributes for a file, we incorporate an `extensions' mechanism into the standard, whereby unspecified fields can be included.</p>
+			<p>In the following code block, we include author information with the standard fields</p>
+			<code>&lt;!-- meta {
+	"version":1.0,
+	"encoding":"utf-8",
+	"mime":"text/xml",
+	"authors":{
+		"John Vidler",
+		"Stephen Wattam"
+	}
+} --&gt;</code>
+			<p>In this example, the metadata is written across multiple lines - the parser ignores whitespace as much as possible, but some corpus formats only have support for single-line comments - in those cases, we are required to condense the long-form metadata into a single line. Thankfully, XML has paired open/close comment markers, so having this long-form example in a real document would be perfectly valid.</p>
+			<p>One thing to be careful of when using a non-standardised extension is that <strong>the version field must be present</strong>. This is to ensure that as the standard expands, extensions that are added to the standard to not interfere with those in the file headers.</p>
+		</section>
+
+		<section>
+			<h2>On-Line Validation Tool</h2>
+			<p class="centerbox"><a class="pure-button pure-button-primary" href="validation.html">Take me to the on-line validation tool!</a></p>
 			<p>Check if your corpus files are Metaheader Compliant with our on-line validation tool - it runs locally in your browser, so you don't have to upload anything!</p>
 		</section>
 
@@ -42,9 +69,8 @@
 				Such a method permits innovation whilst maintaining maximal compatibility between tools.
 				Herein we demonstrate a method for representing, parsing, and using such documentation in practice.
 			</abstract>
-			<p>...Information on the paper, and the format...</p>
 			
-			<p>
+			<p class="centerbox">
 				<a class="pure-button pure-button-disabled" href="#">Take me to the paper!</a>
 				<a class="pure-button" href="https://github.com/UCREL/CL-metaheaders">Take me to the files!</a>
 			</p>

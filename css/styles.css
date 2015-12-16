@@ -9,13 +9,15 @@ margin: 0;
 #a { color: #4183c4; text-decoration: none; }
 #a:hover { text-decoration: underline; }
 
+h1, h2, h3, h4, h5, h6 { text-align: center; }
+
 h1 { width: 800px; position:relative; left: -100px; letter-spacing: -1px; line-height: 60px; font-size: 60px; font-weight: 100; margin: 0px 0 50px 0; text-shadow: 0 1px 0 #fff; }
 p { color: rgba(0, 0, 0, 0.5); margin: 20px 0; line-height: 1.6; }
 
 ul { list-style: none; }
 #li { display: table-cell; font-weight: bold; width: 1%; }
 
-section { margin-bottom: 5em; }
+section { margin-bottom: 5em; text-align: left; }
 abstract {
 	display: block;
 	background: #f3f3f3;
@@ -63,17 +65,31 @@ output tr {
     height: 1.2em;
 }
 
+.centerbox {
+	text-align: center;
+}
+
 .content-box {
 	border: 2px solid #dddddd;
 	box-shadow: 0 1px 3px #fff;
 	margin: 0.5em;
 	padding: 0.5em;
+	text-align: center;
 }
 
 .icon {
 	float: right;
 	height: 1em;
 	padding: 5px;
+}
+
+code {
+	font-size: 12px;
+	font-family: monospace;
+	display: inline-block;
+	padding: 5px;
+	text-align: left;
+	white-space: pre;
 }
 
 .logo { display: inline-block; margin-top: 35px; }
