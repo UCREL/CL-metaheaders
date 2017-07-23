@@ -1,4 +1,4 @@
-var CURRENT_VERSION = 1.0;
+var CURRENT_VERSION = "1.0.5";
 
 var output = [];
 var formats = {};
@@ -22,26 +22,31 @@ Object.prototype.extend = function(obj) {
 
 function validateStructure( json ) {
 	var status = true;
-	if( typeof json.version === 'undefined' ) {
+	if( typeof json["__version__"] === 'undefined' ) {
 		System.pushWarning( "An explicit version value was not found, using the latest version (", CURRENT_VERSION, ")" );
 		status = false;
 	} else {
-		System.pushReport( "Version present! Checking against version", json.version, "rules" );
+		System.pushReport( "Version present! Checking against version", json["__version__"], "rules" );
 	}
 
 	if( typeof json.encoding === 'undefined' ) {
-		System.pushError( "Missing 'encoding' field!" );
-		status = false;
+		System.pushError( "Missing 'encoding' field, assuming UTF-8" );
+	} else {
+		System.pushReport( "Explicit encoding: ", json.encoding );
 	}
 
-	if( typeof json.mime === 'undefined' ) {
-		System.pushError( "Missing 'mime' field!" );
-		status = false;
-	} else {
+	if( typeof json.mime != 'undefined' ) {
 		if( formats[json.mime] )
 			System.pushReport( "Mime type present, and read as '", json.mime, "', aka. <a href='"+formats[json.mime].link+"'>", formats[json.mime].description, "</a>" );
 		else
 			System.pushError( "Mime type present, but not a recognised type! (", json.mime, ")" );
+	}
+
+	var blacklist = [ "__version__", "encoding", "mime", "extend" ]; // Note 'extend' is a brokeness of current browsers, it seems...
+	// Wander over the rest of the object looking for namespaces
+	for( var key in json ) {
+		if( !blacklist.includes(key) )
+			System.pushReport( "Namespace '", key, "' present." );
 	}
 
 	return status;

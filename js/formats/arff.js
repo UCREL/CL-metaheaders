@@ -29,10 +29,10 @@ formats['text/arff'] = {
 		var endIndex = 0;
 		while( startIndex != -1 && attempts-- > 0 )
 		{
-			startIndex = data.indexOf( "% meta", startIndex );
+			startIndex = data.indexOf( "% !meta", startIndex );
 			if( startIndex > -1 ) {
 				endIndex = data.indexOf( '\n', (startIndex+1) );
-				return data.substring( startIndex+6, endIndex );
+				return data.substring( startIndex+7, endIndex );
 			}
 		}
 		return null;

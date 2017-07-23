@@ -28,11 +28,11 @@ formats['text/xml'] = {
 		var endIndex = 0;
 		while( startIndex != -1 && attempts-- > 0 )
 		{
-			startIndex = data.indexOf( "<!-- meta", startIndex );
+			startIndex = data.indexOf( "<!-- !meta", startIndex );
 			if( startIndex > -1 ) {
 				endIndex = data.indexOf( "-->", (startIndex+1) );
 				
-				return data.substring( startIndex+9, endIndex );
+				return data.substring( startIndex+10, endIndex );
 			}
 		}
 		return null;
