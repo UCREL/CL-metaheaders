@@ -4,7 +4,7 @@
 @ATTRIBUTE sex {"male","female"}
 @ATTRIBUTE survived {"yes","no"}
 
-% meta { "__version__":"1.0.5", "encoding":"UTF-8", "mime":"text/arff" }
+% !meta { "__version__":"1.0.5", "encoding":"UTF-8", "mime":"text/arff" }
 
 @DATA
 1st,adult,male,yes
