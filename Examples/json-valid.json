@@ -1,6 +1,6 @@
 {
 	"__meta__":{
-		"version":1.0,
+		"__version__":"1.0.5",
 		"mime":"application/json",
 		"encoding":"UTF-8"
 	}
