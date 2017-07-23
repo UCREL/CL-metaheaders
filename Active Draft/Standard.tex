@@ -1,0 +1,97 @@
+\documentclass[10pt,a4paper,twoside,openany]{memoir}
+
+% Chapter Modifications
+\usepackage{titlesec}
+\titleformat{\chapter}{\normalfont\huge}{\bfseries\thechapter.}{20pt}{\bfseries\huge}
+
+% DRAFT Watermark
+\usepackage{draftwatermark}
+\SetWatermarkText{DRAFT}
+\SetWatermarkScale{9}
+\SetWatermarkLightness{0.95}
+
+% Version History
+\usepackage{vhistory}
+
+% Colours
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+
+% Margins
+\usepackage[top=2cm,bottom=3cm,inner=3cm,outer=2cm]{geometry}
+
+% Code listings
+\usepackage{listings}
+\lstset{
+  basicstyle=\fontfamily{lmvtt}\selectfont\small\color{black},
+  columns=fullflexible,
+  tabsize=3,
+  frame=shadowbox
+}
+
+% Squash lists down a bit
+\usepackage{enumitem}
+\setlist{noitemsep}
+
+% Links
+\usepackage{hyperref}
+
+% Font
+\renewcommand*\rmdefault{cmss}
+
+% Respect subsection numbering & sectioning depth in the TOC
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{1}
+
+\title{CL Metaheaders \\ Open Specification \\ Revision 1.0.x}
+\author{
+        John Vidler \texttt{j.vidler@lancaster.ac.uk} \\
+        Stephen Wattam \texttt{steve@watt.am} \\
+}
+\date{Compiled \today}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+
+\begin{center}
+\vspace*{3em}
+This specification is currently under heavy development, and is incomplete in a large number of places, please ensure you use the latest edition by examining the compiled date above.
+
+\vspace*{3em}
+
+Comments and suggestions to be directed to\\
+\texttt{j.vidler@lancaster.ac.uk} and/or \texttt{s.wattam@lancaster.ac.uk}
+\end{center}
+
+\begin{figure}[b!]
+    \textit{Corpus researchers, along with many other disciplines in science are being put under continual pressure to show accountability and reproducibility in their work.
+    This is unsurprisingly difficult when the researcher is faced with a wide array of methods and tools through which to do their work; simply tracking the operations done can be problematic, especially when toolchains are often configured by the developers, but left largely as a black box to the user.
+    Here we present a scheme for encoding this `meta data' inside the corpus files themselves in a structured data format, along with a proof-of-concept tool to record the operations performed on a file.}
+    
+    \begin{flushright}
+        \textit{Keeping Properties with the Data, CL-MetaHeaders-An Open Specification} \cite{vidler2017metaheaders}
+    \end{flushright}
+\end{figure}
+
+\clearpage
+
+\pagenumbering{roman}
+\input{0_changes.tex}\clearpage
+
+\setcounter{page}{0}
+\pagenumbering{arabic}
+\tableofcontents\clearpage
+
+\input{1_outline.tex}\clearpage
+\input{2_format.tex}\clearpage
+\input{3_fields.tex}\clearpage
+\input{4_namespaces.tex}\clearpage
+\input{5_embedding.tex}\clearpage
+%\input{6_tools.tex}\clearpage
+%\input{7_libraries.tex}\clearpage
+\input{8_samples.tex}\clearpage
+
+\bibliographystyle{plain}
+\bibliography{papers,software,standards,surveys}
+
+\end{document}

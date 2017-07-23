@@ -1,0 +1,86 @@
+\section{\texttt{history} - Operations History}
+
+\begin{tabular}{r|l}
+    Maintainer & John Vidler (\href{mailto:j.vidler@lancaster.ac.uk}{j.vidler@lancaster.ac.uk}) \\
+    Version & 1.0.0 \\
+    Last Updated & 12 June 2017 \\
+\end{tabular} \vspace{1em}
+
+A top-level namespace conforming to the \texttt{history} namespace specification that describes the processing history of this file. Complies with the interface specification and thus has an inner \texttt{\_\_version\_\_} field.
+
+The complete structure for the \texttt{history} namespace is as follows (newlines inserted for clarity, and values skipped for brevity):
+
+\begin{lstlisting}
+{
+    "__version__": "1.0.0",
+    "log": [
+        { "binary": "...", "time": "...", "args": "...", "platform": "...", "md5": "..." },
+        { "binary": "...", "time": "...", "args": "...", "platform": "...", "md5": "..." }
+    ]
+}
+\end{lstlisting}
+
+Note that the $log$ field is an array of operations, which may contain any number of entries, including zero.
+
+
+\subsection{\texttt{\_\_version\_\_}}
+(String, Required)
+
+The SemVer (see \ref{sec:SemanticVersioning}) compliant version that this history meta-block complies with, currently at 1.0.0.
+
+
+\subsection{\texttt{log}}
+(Array, Optional)
+
+The array of logged actions, each entry should be a log-object.
+If this field is absent, compliant parser implementations should interpret this as a zero-length array (no logged actions).
+Each object in this array should have at least a $binary$ and $time$ field, but may also optionally include $args$, $platform$, and $md5$ fields as required.
+
+\textbf{NOTE:} The log entries are likely to be an in-time-order array, but if you require guaranteed true time-order listing, ensure the parsing application sorts by the $time$ field.
+
+\subsubsection{\texttt{binary}}
+(String, Required)
+
+The binary executed on this file.
+If possible, non-system specific paths should be used to aid with compatibility between platforms.
+
+\subsubsection{\texttt{time}}
+(String, Required)
+
+An ISO8601\cite{ISO/8601} format string for when the binary was executed.
+
+\subsubsection{\texttt{args}}
+(String, Optional)
+
+Any command-line arguments that were passed to the binary for this log entry.
+Quotes must be escaped in the string to comply with the JSON specification.
+
+\subsubsection{\texttt{platform}}
+(String, Optional)
+
+The dot-delimited platform and architecture that this command was executed on.
+Examples of possible values are shown below, but any valid $platform.arch$ string is permissible.
+
+\begin{itemize}
+    \item{Linux.x86}
+    \item{Linux.x64}
+    \item{Linux.ARMv7LE}
+    \item{Linux.ARMv7BE}
+    \item{Windows.x86}
+    \item{Windows.x64}
+    \item{osX.x86}
+    \item{osX.x64}
+\end{itemize}
+
+
+\subsubsection{\texttt{md5}}
+(String, Optional)
+
+The MD5 hash string of the binary executed for this log entry.
+
+
+\section{Example}
+
+\lstinputlisting{examples/ns-history/example-json.json}
+
+\noindent\textit{(NOTE: Linebreaks, indentation, and spacing added for readability but not required for the header to function)}

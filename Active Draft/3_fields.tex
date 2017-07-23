@@ -1,0 +1,35 @@
+\chapter{Recognised Fields}
+The preliminary set of features identified for inclusion have been selected to allow the identification of key features of the subsequent texts, and allow them to be correctly loaded by software, and are:
+
+\begin{itemize}
+    \item common to all machine-readable text representations;
+    \item necessary-yet-uninteresting features of the dataset;
+    \item generally useful across many tool types.
+\end{itemize}
+
+
+
+\section{\texttt{\_\_version\_\_}}
+\textit{(Optional, String)}
+
+The specification version that this header complies with, if missing, assumes the latest draft.
+Version numbers are specified following Semantic Versioning \cite{semver}, making it easy to determine compatibility.
+
+
+\section{\texttt{encoding}}
+\textit{(Optional, String)}
+
+Character encoding of current text, as defined by the IANA list of preferred text encoding names\cite{EncodingNames}.
+While optional, it is strongly advised that this field be present to avoid any ambiguity in parsing.
+If absent, this implicitly defaults to UTF-8.
+
+\section{\texttt{mime}}
+\textit{(Optional, String)}
+
+The extended MIME\cite{MIMETypes} type used to describe what this file is.
+
+
+\section{\texttt{group}}
+\textit{(Optional, String or Object)}
+
+Used to track which files belong to collections, defined as an object conforming to the \texttt{group} namespace specification.

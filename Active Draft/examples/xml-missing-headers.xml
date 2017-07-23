@@ -1,0 +1,4 @@
+<root>
+	<text>This is just a plain XML file without any header</text>
+	<text>But it is still <emphasis>totally</emphasis> valid!</text>
+</root>

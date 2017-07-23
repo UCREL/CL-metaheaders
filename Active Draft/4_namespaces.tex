@@ -1,0 +1,24 @@
+\chapter{Namespaces}
+
+Namespaces extend the basic meta block with additional functionality.
+Developers are encouraged to create their own namespace for their own tool(s) if none of the currently accepted namespaces listed here apply.
+
+To petition to have your namespace officially accepted, contact should be made through raising an issue at \url{https://github.com/UCREL/CL-metaheaders/issues} with a new feature request listing the following features of the proposed new namespace:
+
+\begin{enumerate}
+    \item The top-level name, as it should appear in the header
+    \item Any field names that are included
+    \item The current latest version, in Semantic Version\cite{semver} format
+    \item The name contact details for the current maintainer
+\end{enumerate}
+
+Along with a clear description of what the namespace is used for, and any other details the submitter feels necessary.
+
+If there is a specific tool or set of tools that uses the namespace described, details should be given of what the tool does, along with where the tool can be found, ideally as a web link to a stable address (GitHub pages are one such example, where the project URL is unlikely to change, but other sites are also acceptable).
+
+\vspace{3em}\hrule\vspace{3em}
+
+The rest of this section is given over to concrete implementations of namespaces recognised as 'standard' by this specification.
+If you are planning to propose additional namespaces be added to the specification, the \texttt{history} namespace can be viewed as a template for the format and general content of your addition.
+
+\clearpage\input{ns-history.tex}
