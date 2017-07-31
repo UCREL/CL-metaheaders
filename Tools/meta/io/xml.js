@@ -1,6 +1,5 @@
 const fs = require( 'fs' );
 
-//<!--([\s\S\n]*?)-->
 
 function read( target, callback ) {
 	fs.readFile( target, "utf8", (err, contents) => {
