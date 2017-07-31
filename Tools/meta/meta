@@ -22,18 +22,21 @@ config.scriptPath = process.argv.shift();
 while( process.argv.length > 0 ) {
 	if( !process.argv[0].startsWith("-") )
 		break;
+
+	// Grab the argument key, without the dash
 	var flag = process.argv.shift().substring(1);
-	var value = ( process.argv[0].startsWith("-") ? true : process.argv.shift() );
+
+	// Snip double dash'd arguments down to their key string
+	if( flag.startsWith("-") )
+		flag = flag.substring(1);
+
+	var value = true;
+	if( process.argv.length > 0 )
+		value = ( process.argv[0].startsWith("-") ? true : process.argv.shift() );
 	config[flag] = value;
 }
 
 config.command = {};
-
-if( process.argv.length > 0 )
-	config.action = process.argv.shift();
-else
-	return console.log( "META", "No action to run?" );
-
 
 const actions = {};
 
@@ -156,6 +159,16 @@ function fancyPrint( object, prefix = "meta." ) {
 				console.log( `${prefix}${k} = '${object[k]}'` );
 		}
 	}
+}
+
+if( config.h == true || config.help == true )
+	config.action = "help";
+
+if( config.action === undefined ) {
+	if( process.argv.length > 0 )
+		config.action = process.argv.shift();
+	else
+		config.action = "help";
 }
 
 // Actually run stuff :)

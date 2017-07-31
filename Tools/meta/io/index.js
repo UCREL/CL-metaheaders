@@ -1,9 +1,10 @@
 module.exports = {};
 
-module.exports.tei = require( "./xml.js" );
-module.exports.xml = require( "./xml.js" );
+module.exports.tei  = require( "./xml.js" );
+module.exports.xml  = require( "./xml.js" );
 module.exports.json = require( "./json.js" );
-module.exports.js = require( "./json.js" );
+module.exports.js   = require( "./json.js" );
+module.exports.arff = require( "./arff.js" ); // NOTE: Not sure if this is the correct file extension... -John.
 
 module.exports._guess = ( target ) => {
 	const Path = require( "path" );
