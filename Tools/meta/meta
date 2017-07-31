@@ -135,7 +135,7 @@ actions.show = ( config ) => {
 		if( err )
 			return console.log( err );
 
-		console.log( JSON.stringify( meta, null, '\t' ) );
+		fancyPrint( meta );
 	} );
 };
 
